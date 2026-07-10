@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenSpace - Relax & Deploy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a1a;
+            --bg-secondary: #0d1117;
+            --accent-purple: #7c3aed;
+            --accent-blue: #3b82f6;
+            --accent-teal: #14b8a6;
+            --accent-pink: #ec4899;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ===== ANIMATED BACKGROUND ===== */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite;
+            opacity: 0;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: var(--opacity); transform: scale(1); }
+        }
+
+        .nebula {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: nebulaPulse 8s ease-in-out infinite alternate;
+        }
+
+        .nebula-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, transparent 70%);
+            top: -100px;
+            left: -100px;
+        }
+
+        .nebula-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%);
+            bottom: -50px;
+            right: -100px;
+            animation-delay: -4s;
+        }
+
+        .nebula-3 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(20, 184, 166, 0.10) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -2s;
+        }
+
+        @keyframes nebulaPulse {
+            0% { transform: scale(1) rotate(0deg); }
+            100% { transform: scale(1.2) rotate(10deg); }
+        }
+
+        /* ===== SHOOTING STARS ===== */
+        .shooting-star {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, white, transparent);
+            border-radius: 50%;
+            animation: shoot var(--shoot-duration) linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes shoot {
+            0% { transform: translateX(-200px) translateY(0) rotate(-45deg); opacity: 1; width: 0; }
+            30% { width: 150px; opacity: 1; }
+            100% { transform: translateX(800px) translateY(400px) rotate(-45deg); opacity: 0; width: 150px; }
+        }
+
+        /* ===== FLOATING ORBS ===== */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            animation: floatOrb var(--orb-duration) ease-in-out infinite alternate;
+        }
+
+        @keyframes floatOrb {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(var(--tx), var(--ty)) scale(1.1); }
+        }
+
+        /* ===== LAYOUT ===== */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            position: relative;
+            z-index: 10;
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--card-border);
+            background: rgba(10, 10, 26, 0.6);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue), var(--accent-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(20, 184, 166, 0.1);
+            border: 1px solid rgba(20, 184, 166, 0.3);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            color: var(--accent-teal);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-teal);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.4); }
+            50% { box-shadow: 0 0 0 6px rgba(20, 184, 166, 0); }
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            text-align: center;
+            padding: 80px 20px 60px;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(124, 58, 237, 0.1);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            color: #a78bfa;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            margin-bottom: 24px;
+            letter-spacing: 0.5px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #e2e8f0 0%, #a78bfa 40%, #60a5fa 70%, #2dd4bf 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin: 0 auto 40px;
+            line-height: 1.7;
+        }
+
+        /* ===== BREATHING WIDGET ===== */
+        .breathe-section {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 70px;
+        }
+
+        .breathe-container {
+            text-align: center;
+        }
+
+        .breathe-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .breathe-ring-outer {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            cursor: pointer;
+        }
+
+        .breathe-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid rgba(124, 58, 237, 0.3);
+            animation: breatheRing 8s ease-in-out infinite;
+        }
+
+        .breathe-ring-1 {
+            width: 200px;
+            height: 200px;
+            top: 0; left: 0;
+            border-color: rgba(124, 58, 237, 0.2);
+        }
+
+        .breathe-ring-2 {
+            width: 160px;
+            height: 160px;
+            top: 20px; left: 20px;
+            border-color: rgba(59, 130, 246, 0.3);
+            animation-delay: -1s;
+        }
+
+        .breathe-ring-3 {
+            width: 120px;
+            height: 120px;
+            top: 40px; left: 40px;
+            border-color: rgba(20, 184, 166, 0.4);
+            animation-delay: -2s;
+        }
+
+        @keyframes breatheRing {
+            0%, 100% { transform: scale(0.85); opacity: 0.4; }
+            50% { transform: scale(1.05); opacity: 1; }
+        }
+
+        .breathe-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.6), rgba(59, 130, 246, 0.3));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            animation: breatheCenter 8s ease-in-out infinite;
+            box-shadow: 0 0 30px rgba(124, 58, 237, 0.4);
+        }
+
+        @keyframes breatheCenter {
+            0%, 100% { transform: translate(-50%, -50%) scale(0.9); box-shadow: 0 0 20px rgba(124, 58, 237, 0.3); }
+            50% { transform: translate(-50%, -50%) scale(1.1); box-shadow: 0 0 50px rgba(124, 58, 237, 0.6); }
+        }
+
+        .breathe-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            animation: breatheText 8s ease-in-out infinite;
+        }
+
+        @keyframes breatheText {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* ===== STATS ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 50px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--stat-color);
+            opacity: 0.7;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== TOOLS SECTION ===== */
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            background: linear-gradient(90deg, var(--text-primary), var(--text-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-sub {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 50px;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .tool-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,0.04) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tool-card:hover::after {
+            opacity: 1;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--tool-accent);
+            box-shadow: 0 0 30px rgba(0,0,0,0.3), 0 0 0 1px var(--tool-accent);
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .tool-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--tool-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .tool-badge {
+            font-size: 0.72rem;
+            padding: 3px 10px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--card-border);
+            color: var(--text-secondary);
+        }
+
+        .tool-badge.active {
+            background: rgba(20, 184, 166, 0.1);
+            border-color: rgba(20, 184, 166, 0.3);
+            color: var(--accent-teal);
+        }
+
+        .tool-name {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+
+        .tool-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .tool-footer {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* ===== CHECKLIST ===== */
+        .checklist-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 50px;
+        }
+
+        .checklist-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .checklist-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .progress-bar-wrap {
+            flex: 1;
+            max-width: 200px;
+            margin-left: 20px;
+        }
+
+        .progress-bar-bg {
+            height: 6px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-teal));
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .progress-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--card-border);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .check-item:last-child {
+            border-bottom: none;
+        }
+
+        .check-item:hover {
+            padding-left: 6px;
+        }
+
+        .check-box {
+            width: 22px;
+            height: 22px;
+            border: 2px solid rgba(255,255,255,0.15);
+            border-radius: 6px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 0.75rem;
+        }
+
+        .check-item.done .check-box {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            border-color: transparent;
+            color: white;
+        }
+
+        .check-item.done .check-label {
+            color: var(--text-secondary);
+            text-decoration: line-through;
+        }
+
+        .check-label {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            transition: color 0.3s;
+        }
+
+        .check-tag {
+            margin-left: auto;
+            font-size: 0.72rem;
+            padding: 2px 8px;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.05);
+            color: var(--text-secondary);
+        }
+
+        /* ===== MOOD SELECTOR ===== */
+        .mood-section {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .mood-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .mood-sub {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .mood-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .mood-btn {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 14px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            min-width: 80px;
+        }
+
+        .mood-btn:hover {
+            transform: translateY(-4px) scale(1.05);
+            background: rgba(255,255,255,0.08);
+        }
+
+        .mood-btn.selected {
+            border-color: var(--accent-purple);
+            background: rgba(124, 58, 237, 0.15);
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
+            transform: translateY(-4px) scale(1.08);
+        }
+
+        .mood-emoji {
+            font-size: 1.8rem;
+        }
+
+        .mood-label {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+        }
+
+        .mood-response {
+            margin-top: 20px;
+            padding: 14px 20px;
+            background: rgba(124, 58, 237, 0.08);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            color: #a78bfa;
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== AMBIENT SOUNDS ===== */
+        .sounds-section {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 50px;
+        }
+
+        .sounds-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .sound-btn {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 18px 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-primary);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sound-btn:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateY(-2px);
+        }
+
+        .sound-btn.playing {
+            border-color: var(--accent-teal);
+            background: rgba(20, 184, 166, 0.1);
+            box-shadow: 0 0 20px rgba(20, 184, 166, 0.2);
+        }
+
+        .sound-btn .sound-wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--accent-teal);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .sound-btn.playing .sound-wave {
+            transform: scaleX(1);
+            animation: waveAnim 1.5s ease-in-out infinite;
+        }
+
+        @keyframes waveAnim {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .sound-icon { font-size: 1.8rem; margin-bottom: 8px; display: block; }
+        .sound-name { font-size: 0.8rem; color: var(--text-secondary); }
+        .sound-tag { font-size: 0.7rem; color: var(--accent-teal); margin-top: 4px; display: none; }
+        .sound-btn.playing .sound-tag { display: block; }
+
+        /* ===== QUOTE ===== */
+        .quote-card {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(59, 130, 246, 0.08), rgba(20, 184, 166, 0.06));
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quote-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .quote-icon {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+            display: block;
+            opacity: 0.6;
+        }
+
+        .quote-text {
+            font-size: 1.15rem;
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-style: italic;
+            margin-bottom: 12px;
+            transition: all 0.4s ease;
+        }
+
+        .quote-author {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .quote-hint {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.2);
+            margin-top: 16px;
+        }
+
+        /* ===== CLOCK ===== */
+        .clock-section {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .clock-display {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 200;
+            letter-spacing: 0.1em;
+            background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .clock-date {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 6px;
+            letter-spacing: 1px;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid var(--card-border);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .footer-logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        /* ===== MOON PHASE ===== */
+        .moon-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 50px;
+            padding: 24px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+        }
+
+        .moon-icon {
+            font-size: 3rem;
+            animation: moonFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes moonFloat {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-8px) rotate(5deg); }
+        }
+
+        .moon-info h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .moon-info p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            header { padding: 14px 20px; }
+            .tools-grid { grid-template-columns: 1fr; }
+            .sounds-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="nebula nebula-1"></div>
+        <div class="nebula nebula-2"></div>
+        <div class="nebula nebula-3"></div>
+        <div class="stars" id="starsContainer"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <div class="logo-icon">🌙</div>
+            <span class="logo-text">ZenSpace</span>
+        </div>
+        <div class="status-badge">
+            <div class="status-dot"></div>
+            All Systems Calm
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main>
+        <div class="container">
+
+            <!-- Hero -->
+            <div class="hero">
+                <div class="hero-tag">✨ Your peaceful deployment companion</div>
+                <h1>Deploy with calm.<br>Build with focus.</h1>
+                <p>A serene space to test, breathe, and confirm your deployments are running smoothly. Take it easy — you've got this.</p>
+            </div>
+
+            <!-- Clock -->
+            <div class="clock-section">
+                <div class="clock-display" id="clock">00:00:00</div>
+                <div class="clock-date" id="clockDate">Loading...</div>
+            </div>
+
+            <!-- Breathing Widget -->
+            <div class="breathe-section">
+                <div class="breathe-container">
+                    <div class="breathe-label">🫧 Breathe with me</div>
+                    <div class="breathe-ring-outer">
+                        <div class="breathe-ring breathe-ring-1"></div>
+                        <div class="breathe-ring breathe-ring-2"></div>
+                        <div class="breathe-ring breathe-ring-3"></div>
+                        <div class="breathe-center">🌸</div>
+                    </div>
+                    <div class="breathe-text" id="breatheText">Breathe in...</div>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card" style="--stat-color: linear-gradient(90deg, #7c3aed, #3b82f6)">
+                    <div class="stat-icon">🚀</div>
+                    <div class="stat-value" id="uptime">99.9%</div>
+                    <div class="stat-label">Uptime</div>
+                </div>
+                <div class="stat-card" style="--stat-color: linear-gradient(90deg, #14b8a6, #3b82f6)">
+                    <div class="stat-icon">⚡</div>
+                    <div class="stat-value" id="responseTime">12ms</div>
+                    <div class="stat-label">Response Time</div>
+                </div>
+                <div class="stat-card" style="--stat-color: linear-gradient(90deg, #ec4899, #7c3aed)">
+                    <div class="stat-icon">📦</div>
+                    <div class="stat-value" id="deploysCount">42</div>
+                    <div class="stat-label">Deployments</div>
+                </div>
+                <div class="stat-card" style="--stat-color: linear-gradient(90deg, #f59e0b, #ec4899)">
+                    <div class="stat-icon">🌍</div>
+                    <div class="stat-value">Global</div>
+                    <div class="stat-label">Reach</div>
+                </div>
+            </div>
+
+            <!-- Tools Grid -->
+            <div class="section-title">🛠️ Deployment Tools</div>
+            <div class="section-sub">Quick access to your favorite platforms</div>
+            <div class="tools-grid">
+                <div class="tool-card" style="--tool-accent: rgba(99,102,241,0.5); --tool-bg: rgba(99,102,241,0.1);" onclick="openLink('https://vercel.com')">
+                    <div class="tool-header">
+                        <div class="tool-icon">▲</div>
+                        <span class="tool-badge active">Active</span>
+                    </div>
+                    <div class="tool-name">Vercel</div>
+                    <div class="tool-desc">Deploy frontend apps with zero config. Instant global CDN.</div>
+                    <div class="tool-footer">🔗 vercel.com</div>
+                </div>
+                <div class="tool-card" style="--tool-accent: rgba(99,179,237,0.5); --tool-bg: rgba(99,179,237,0.1);" onclick="openLink('https://netlify.com')">
+                    <div class="tool-header">
+                        <div class="tool-icon">🌿</div>
+                        <span class="tool-badge active">Active</span>
+                    </div>
+                    <div class="tool-name">Netlify</div>
+                    <div class="tool-desc">Build, deploy, and scale modern web projects seamlessly.</div>
+                    <div class="tool-footer">🔗 netlify.com</div>
+                </div>
+                <div class="tool-card" style="--tool-accent: rgba(246,135,100,0.5); --tool-bg: rgba(246,135,100,0.1);" onclick="openLink('https://render.com')">
+                    <div class="tool-header">
+                        <div class="tool-icon">🔶</div>
+                        <span class="tool-badge">Ready</span>
+                    </div>
+                    <div class="tool-name">Render</div>
+                    <div class="tool-desc">Unified platform for all your apps, sites, and services.</div>
+                    <div class="tool-footer">🔗 render.com</div>
+                </div>
+                <div class="tool-card" style="--tool-accent: rgba(124,58,237,0.5); --tool-bg: rgba(124,58,237,0.1);" onclick="openLink('https://railway.app')">
+                    <div class="tool-header">
+                        <div class="tool-icon">🚂</div>
+                        <span class="tool-badge">Ready</span>
+                    </div>
+                    <div class="tool-name">Railway</div>
+                    <div class="tool-desc">Instant deployments with databases and services included.</div>
+                    <div class="tool-footer">🔗 railway.app</div>
+                </div>
+                <div class="tool-card" style="--tool-accent: rgba(20,184,166,0.5); --tool-bg: rgba(20,184,166,0.1);" onclick="openLink('https://github.com')">
+                    <div class="tool-header">
+                        <div class="tool-icon">🐙</div>
+                        <span class="tool-badge active">Connected</span>
+                    </div>
+                    <div class="tool-name">GitHub</div>
+                    <div class="tool-desc">Your code repository. Push, collaborate, and trigger deploys.</div>
+                    <div class="tool-footer">🔗 github.com</div>
+                </div>
+                <div class="tool-card" style="--tool-accent: rgba(236,72,153,0.5); --tool-bg: rgba(236,72,153,0.1);" onclick="openLink('https://supabase.com')">
+                    <div class="tool-header">
+                        <div class="tool-icon">⚡</div>
+                        <span class="tool-badge">Ready</span>
+                    </div>
+                    <div class="tool-name">Supabase</div>
+                    <div class="tool-desc">Open source Firebase alternative. Database, auth & more.</div>
+                    <div class="tool-footer">🔗 supabase.com</div>
+                </div>
+            </div>
+
+            <!-- Checklist -->
+            <div class="checklist-card">
+                <div class="checklist-header">
+                    <div class="checklist-title">📋 Pre-Deploy Checklist</div>
+                    <div class="progress-bar-wrap">
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" id="progressBar"></div>
+                        </div>
+                        <div class="progress-label" id="progressLabel">0 of 7 done</div>
+                    </div>
+                </div>
+
+                <div class="check-item" onclick="toggleCheck(this)">
+                    <div class="check-box">✓</div>
+                    <span class="check-label">Tested locally — everything works</span>
+                    <span class="check-tag">Local</span>
+                </div>
+                <div class="check-item" onclick="toggleCheck(this)">
+                    <div class="check-box">✓</div>
+                    <span class="check-label">Environment variables configured</span>
+                    <span class="check-tag">Config</span>
+                </div>
+                <div class="check-item" onclick="toggleCheck(this)">
+                    <div class="check-box">✓</div>
+                    <span class="check-label">Build passes without errors</span>
+                    <span class="check-tag">Build</span>
+                </div>
+                <div class="check-item" onclick="toggleCheck(this)">
+                    <div class="check-box">✓</div>
+                    <span class="check-label">Dependencies are up to date</span>
+                    <span class="check-tag">Deps</span>
+                </div>
+                <div class="check-item" onclick="toggleCheck(this)">
+                    <div class="check-box">✓</div>
+                    <span class="check-label">Git repository is clean and pushed</span>
+                    <span class="check-tag">Git</span>
+                </div>
+                <div class="check-item" onclick="toggleCheck(this)">
+                    <div class="check-box">✓</div>
+                    <span class="check-label">Database migrations applied</span>
+                    <span class="check-tag">DB</span>
+                </div>
+                <div class="check-item" onclick="toggleCheck(this)">
+                    <div class="check-box">✓</div>
+                    <span class="check-label">Took a deep breath 🌸</span>
+                    <span class="check-tag">Zen</span>
+                </div>
+            </div>
+
+            <!-- Mood Selector -->
+            <div class="mood-section">
+                <div class="mood-title">How are you feeling right now?</div>
+                <div class="mood-sub">No judgment. Just checking in on you. 💙</div>
+                <div class="mood-grid">
+                    <button class="mood-btn" onclick="selectMood(this, 'calm')" data-response="You're in the perfect state to deploy. Calm and focused — your code will love you for it. ✨">
+                        <span class="mood-emoji">😌</span>
+                        <span class="mood-label">Calm</span>
+                    </button>
+                    <button class="mood-btn" onclick="selectMood(this, 'focused')" data-response="Focus mode activated! You're unstoppable right now. Go ship that code. 🚀">
+                        <span class="mood-emoji">🎯</span>
+                        <span class="mood-label">Focused</span>
+                    </button>
+                    <button class="mood-btn" onclick="selectMood(this, 'excited')" data-response="That excitement is contagious! Channel it into your deploy. Great things are coming! 🌟">
+                        <span class="mood-emoji">😄</span>
+                        <span class="mood-label">Excited</span>
+                    </button>
+                    <button class="mood-btn" onclick="selectMood(this, 'tired')" data-response="Take it slow. You don't have to deploy right now. Rest is productive too. 💤">
+                        <span class="mood-emoji">😴</span>
+                        <span class="mood-label">Tired</span>
+                    </button>
+                    <button class="mood-btn" onclick="selectMood(this, 'anxious')" data-response="It's okay. Take three deep breaths. Every bug is just a mystery to solve. You've got this. 🫂">
+                        <span class="mood-emoji">😰</span>
+                        <span class="mood-label">Anxious</span>
+                    </button>
+                    <button class="mood-btn" onclick="selectMood(this, 'happy')" data-response="Happy deployer = happy code! Your positive energy is your superpower today. 🌈">
+                        <span class="mood-emoji">🥳</span>
+                        <span class="mood-label">Happy</span>
+                    </button>
+                </div>
+                <div class="mood-response" id="moodResponse"></div>
+            </div>
+
+            <!-- Ambient Sounds -->
+            <div class="sounds-section">
+                <div class="section-title">🎵 Ambient Atmosphere</div>
+                <div class="section-sub">Visual sounds to set the mood (visual only — no audio required)</div>
+                <div class="sounds-grid">
+                    <button class="sound-btn" onclick="toggleSound(this)">
+                        <span class="sound-icon">🌧️</span>
+                        <div class="sound-name">Rain</div>
+                        <div class="sound-tag">♪ playing</div>
+                        <div class="sound-wave"></div>
+                    </button>
+                    <button class="sound-btn" onclick="toggleSound(this)">
+                        <span class="sound-icon">🌊</span>
+                        <div class="sound-name">Ocean</div>
+                        <div class="sound-tag">♪ playing</div>
+                        <div class="sound-wave"></div>
+                    </button>
+                    <button class="sound-btn" onclick="toggleSound(this)">
+                        <span class="sound-icon">🔥</span>
+                        <div class="sound-name">Campfire</div>
+                        <div class="sound-tag">♪ playing</div>
+                        <div class="sound-wave"></div>
+                    </button>
+                    <button class="sound-btn" onclick="toggleSound(this)">
+                        <span class="sound-icon">🌲</span>
+                        <div class="sound-name">Forest</div>
+                        <div class="sound-tag">♪ playing</div>
+                        <div class="sound-wave"></div>
+                    </button>
+                    <button class="sound-btn" onclick="toggleSound(this)">
+                        <span class="sound-icon">🌙</span>
+                        <div class="sound-name">Night</div>
+                        <div class="sound-tag">♪ playing</div>
+                        <div class="sound-wave"></div>
+                    </button>
+                    <button class="sound-btn" onclick="toggleSound(this)">
+                        <span class="sound-icon">☕</span>
+                        <div class="sound-name">Café</div>
+                        <div class="sound-tag">♪ playing</div>
+                        <div class="sound-wave"></div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Moon Phase -->
+            <div class="moon-section">
+                <div class="moon-icon" id="moonIcon">🌕</div>
+                <div class="moon-info">
+                    <h3 id="moonPhase">Full Moon Tonight</h3>
+                    <p id="moonMessage">A powerful night to launch something great.</p>
+                </div>
+            </div>
+
+            <!-- Quote -->
+            <div class="quote-card" onclick="refreshQuote()">
+                <span class="quote-icon">💫</span>
+                <div class="quote-text" id="quoteText">"The secret of getting ahead is getting started."</div>
+                <div class="quote-author" id="quoteAuthor">— Mark Twain</div>
+                <div class="quote-hint">Click to refresh quote</div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">🌙 ZenSpace</div>
+        <p>Made with ✨ for calm deployments · Stay relaxed, stay focused</p>
+    </footer>
+
+    <script>
+        // ===== STARS GENERATION =====
+        function createStars() {
+            const container = document.getElementById('starsContainer');
+            for (let i = 0; i < 180; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                const size = Math.random() * 2.5 + 0.5;
+                star.style.cssText = `
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    --duration: ${Math.random() * 4 + 2}s;
+                    --opacity: ${Math.random() * 0.7 + 0.3};
+                    animation-delay: ${Math.random() * 5}s;
+                `;
+                container.appendChild(star);
+            }
+
+            // Shooting stars
+            for (let i = 0; i < 5; i++) {
+                const shoot = document.createElement('div');
+                shoot.classList.add('shooting-star');
+                shoot.style.cssText = `
+                    left: ${Math.random() * 50}%;
+                    top: ${Math.random() * 50}%;
+                    --shoot-duration: ${Math.random() * 8 + 6}s;
+                    animation-delay: ${Math.random() * 10}s;
+                `;
+                container.appendChild(shoot);
+            }
+        }
+        createStars();
+
+        // ===== CLOCK =====
+        function updateClock() {
+            const now = new Date();
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('clock').textContent = `${h}:${m}:${s}`;
+
+            const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+            const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+            document.getElementById('clockDate').textContent =
+                `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // ===== BREATHING TEXT =====
+        const breatheStates = ['Breathe in...', 'Hold...', 'Breathe out...', 'Hold...'];
+        let breatheIdx = 0;
+        function cycleBreathe() {
+            const el = document.getElementById('breatheText');
+            el.style.opacity = 0;
+            setTimeout(() => {
+                breatheIdx = (breatheIdx + 1) % breatheStates.length;
+                el.textContent = breatheStates[breatheIdx];
+                el.style.opacity = 1;
+            }, 300);
+        }
+        setInterval(cycleBreathe, 4000);
+
+        // ===== ANIMATED STATS =====
+        function animateCounter(el, target, suffix = '') {
+            let current = 0;
+            const step = target / 60;
+            const interval = setInterval(() => {
+                current = Math.min(current + step, target);
+                el.textContent = Math.floor(current) + suffix;
+                if (current >= target) clearInterval(interval);
+            }, 25);
+        }
+
+        setTimeout(() => {
+            animateCounter(document.getElementById('deploysCount'), 42, '');
+        }, 500);
+
+        // Animated response time
+        setInterval(() => {
+            const el = document.getElementById('responseTime');
+            el.textContent = (Math.floor(Math.random() * 20) + 8) + 'ms';
+        }, 3000);
+
+        // ===== CHECKLIST =====
+        function toggleCheck(item) {
+            item.classList.toggle('done');
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const items = document.querySelectorAll('.check-item');
+            const done = document.querySelectorAll('.check-item.done').length;
+            const pct = Math.round((done / items.length) * 100);
+            document.getElementById('progressBar').style.width = pct + '%';
+            document.getElementById('progressLabel').textContent = `${done} of ${items.length} done`;
+        }
+
+        // ===== MOOD =====
+        function selectMood(btn, mood) {
+            document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            const response = document.getElementById('moodResponse');
+            response.textContent = btn.getAttribute('data-response');
+            response.style.display = 'block';
+        }
+
+        // ===== SOUNDS =====
+        function toggleSound(btn) {
+            btn.classList.toggle('playing');
+        }
+
+        // ===== TOOL CARD HOVER GLOW =====
+        document.querySelectorAll('.tool-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                card.style.setProperty('--mx', x + '%');
+                card.style.setProperty('--my', y + '%');
+            });
+        });
+
+        function openLink(url) {
+            window.open(url, '_blank');
+        }
+
+        // ===== QUOTES =====
+        const quotes = [
+            { text: "The secret of getting ahead is getting started.", author: "Mark Twain" },
+            { text: "Code is like humor. When you have to explain it, it's bad.", author: "Cory House" },
+            { text: "First, solve the problem. Then, write the code.", author: "John Johnson" },
+            { text: "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.", author: "Martin Fowler" },
+            { text: "Simplicity is the soul of efficiency.", author: "Austin Freeman" },
+            { text: "The best error message is the one that never shows up.", author: "Thomas Fuchs" },
+            { text: "It always seems impossible until it's done.", author: "Nelson Mandela" },
+            { text: "Small steps every day. That's all it takes.", author: "Unknown" },
+            { text: "In the middle of difficulty lies opportunity.", author: "Albert Einstein" },
+            { text: "Your calm mind is the ultimate weapon against your challenges.", author: "Bryant McGill" },
+        ];
+        let quoteIdx = 0;
+
+        function refreshQuote() {
+            quoteIdx = (quoteIdx + 1) % quotes.length;
+            const q = quotes[quoteIdx];
+            const textEl = document.getElementById('quoteText');
+            const authEl = document.getElementById('quoteAuthor');
+            textEl.style.opacity = 0;
+            authEl.style.opacity = 0;
+            setTimeout(() => {
+                textEl.textContent = `"${q.text}"`;
+                authEl.textContent = `— ${q.author}`;
+                textEl.style.transition = 'opacity 0.4s';
+                authEl.style.transition = 'opacity 0.4s';
+                textEl.style.opacity = 1;
+                authEl.style.opacity = 1;
+            }, 300);
+        }
+
+        // ===== MOON PHASE =====
+        const moons = [
+            { icon: '🌑', phase: 'New Moon', msg: 'A night for new beginnings and fresh deploys.' },
+            { icon: '🌒', phase: 'Waxing Crescent', msg: 'Your project is growing. Keep building.' },
+            { icon: '🌓', phase: 'First Quarter', msg: 'Halfway there — momentum is on your side.' },
+            { icon: '🌔', phase: 'Waxing Gibbous', msg: 'Almost full power. Final testing time.' },
+            { icon: '🌕', phase: 'Full Moon', msg: 'A powerful night to launch something great.' },
+            { icon: '🌖', phase: 'Waning Gibbous', msg: 'Reflect on your progress. Well done.' },
+            { icon: '🌗', phase: 'Last Quarter', msg: 'Wrapping up. Clean code, calm mind.' },
+            { icon: '🌘', phase: 'Waning Crescent', msg: 'Rest and recharge before the next cycle.' },
+        ];
+
+        const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+        const moonData = moons[dayOfYear % 8];
+        document.getElementById('moonIcon').textContent = moonData.icon;
+        document.getElementById('moonPhase').textContent = moonData.phase;
+        document.getElementById('moonMessage').textContent = moonData.msg;
+    </script>
+</body>
+</html>
