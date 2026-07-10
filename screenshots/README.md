@@ -1,5 +1,5 @@
 
-# Screenshot Overview: User Login Page
+# User Login Page
 
 <img width="1526" height="777" alt="Screenshot 2026-07-10 123248" src="https://github.com/user-attachments/assets/081e4832-0233-434e-9271-d9d2c1f9527b" />
 
@@ -15,7 +15,7 @@ Key elements include:
 This confirms that the authentication system is integrated and accessible through the deployed domain.
 
 
-# Screenshot Overview: Deployment Dashboard (ZenSpace)
+#  Deployment Dashboard (ZenSpace)
 
 <img width="1532" height="767" alt="Screenshot 2026-07-10 123330" src="https://github.com/user-attachments/assets/69769985-4a62-4f27-81f4-992592b3fca2" />
 
@@ -67,7 +67,7 @@ This screenshot validates that the complete web application stack is deployed an
 
 
 ---
-# Screenshot Overview: Dockerized Web Application Stack
+# Dockerized Web Application Stack
 
 <img width="1536" height="766" alt="Screenshot 2026-07-10 122933" src="https://github.com/user-attachments/assets/23c0be25-973e-4efd-82b0-266cf5d5c627" />
 
@@ -83,7 +83,7 @@ Key columns include:
 - **created_at** – timestamp of account creation  
 
 This validates that the application’s authentication system is integrated with the database, and user data is being stored and managed correctly.
-# Screenshot Overview: MySQL Container Initialization Logs
+#  MySQL Container Initialization Logs
 
 <img width="1536" height="762" alt="Screenshot 2026-07-10 011845" src="https://github.com/user-attachments/assets/cd95fd8c-f9ed-498b-bc30-7d792059a2a8" />
 
