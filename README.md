@@ -1,6 +1,5 @@
 # Dockerized-PHP-MySQL-Web-Application-on-AWS
 
-<<<<<<< HEAD
 Developed and deployed a containerized PHP-MySQL web application on AWS EC2 using Docker and Nginx. The application demonstrates user authentication with session management and includes phpMyAdmin for database administration (commonly accessed via SSH tunnel in production). This repository contains the application source, Docker configuration, and example environment files for local development.
 
 ## Project Overview
@@ -19,10 +18,6 @@ This is a simple PHP web application intended for learning and demo purposes. It
 - Nginx
 - Docker Compose
 - phpMyAdmin
-## Networking of project 
-
-<img width="4864" height="3328" alt="a_now_make_an_image_wh" src="https://github.com/user-attachments/assets/255468e5-ed8d-4f20-81da-5cac0d15d066" />
-
 
 ## Project Structure
 
@@ -38,6 +33,11 @@ This is a simple PHP web application intended for learning and demo purposes. It
 - `.env.example` - Example environment variables
 - `nginx/nginx.conf` - Contains nginx configuration (https)
 - `Proof-Screenshots/` - Screenshots and proof files
+
+## Networking of project 
+
+<img width="4864" height="3328" alt="a_now_make_an_image_wh" src="https://github.com/user-attachments/assets/255468e5-ed8d-4f20-81da-5cac0d15d066" />
+
 
 ## Prerequisites
 
