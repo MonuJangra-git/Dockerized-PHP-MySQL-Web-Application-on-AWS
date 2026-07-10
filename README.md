@@ -118,5 +118,5 @@ Key variables:
 - Keep your real secrets in a local .env file and do not commit it to Git.
 - The .env file is ignored by Git through [.gitignore](.gitignore).
 - This project is suitable for learning, local development, and basic portfolio/demo purposes.
-- Use you domain name and SSL certificates owned by you.
+- Use domain name and SSL certificates owned by you.
 >>>>>>> da7b54b (Initial commit: project files and proof-screenshots)
