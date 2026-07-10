@@ -97,4 +97,12 @@ Key highlights include:
 - Confirmation that the MySQL server (version **8.0.46**) is fully operational, listening on port **3306**, and ready for connections.  
 
 This log output validates that the MySQL Docker container has been successfully set up, initialized, and is ready to serve as the backend database for the project.
+---
+
+## Final Note
+
+All the screenshots included above serve as **proof of deployment and functionality**.  
+They demonstrate that the environment, services, and application stack are not just theoretical concepts but are **running in practice**.  
+
+> Proofs are everything — theory is just knowledge, but practical implementation makes the real difference.
 
