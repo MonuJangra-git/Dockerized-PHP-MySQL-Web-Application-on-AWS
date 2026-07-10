@@ -19,8 +19,14 @@ This is a simple PHP web application intended for learning and demo purposes. It
 - Nginx
 - Docker Compose
 - phpMyAdmin
+## Networking of project 
+
+<img width="4864" height="3328" alt="a_now_make_an_image_wh" src="https://github.com/user-attachments/assets/255468e5-ed8d-4f20-81da-5cac0d15d066" />
+
 
 ## Project Structure
+
+<img width="2048" height="2048" alt="zen-bear-v6_b_make_an_image_so_tha" src="https://github.com/user-attachments/assets/1bb20c92-c7b4-4c3b-bff3-217d9a255607" />
 
 - `index.php` - Main landing/login page
 - `register.php` - User registration page
