@@ -30,15 +30,16 @@ This is a simple PHP web application intended for learning and demo purposes. It
 - `setup.sql` - Database initialization script
 - `docker-compose.yml` - Container setup
 - `.env.example` - Example environment variables
+- `nginx/nginx.conf` - Contains nginx configuration (https)
 - `Proof-Screenshots/` - Screenshots and proof files
 
 ## Prerequisites
 
 Ensure you have the following installed:
 
-- Docker Desktop
-- Docker Compose
-- Git
+- Docker Desktop ( good if already have )
+- Docker Compose ( mandatory)
+- Git 
 
 ## Setup (Local Development)
 
@@ -117,4 +118,5 @@ Key variables:
 - Keep your real secrets in a local .env file and do not commit it to Git.
 - The .env file is ignored by Git through [.gitignore](.gitignore).
 - This project is suitable for learning, local development, and basic portfolio/demo purposes.
+- Use you domain name and SSL certificates owned by you.
 >>>>>>> da7b54b (Initial commit: project files and proof-screenshots)
