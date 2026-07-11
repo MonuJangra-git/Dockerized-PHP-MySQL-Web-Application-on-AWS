@@ -10,6 +10,7 @@ This is a simple PHP web application intended for learning and demo purposes. It
 - A protected dashboard page
 - A MySQL database for storing users
 - Docker Compose setup for PHP, Nginx, MySQL, and phpMyAdmin
+- Daily database backups in both machine and s3
 
 ## Tech Stack
 
@@ -33,6 +34,8 @@ This is a simple PHP web application intended for learning and demo purposes. It
 - `.env.example` - Example environment variables
 - `nginx/nginx.conf` - Contains nginx configuration (https)
 - `Proof-Screenshots/` - Screenshots and proof files
+- `backup_locally` - for backup and automated using crontab if required daily backups
+- `s3_backup.sh` - backup to s3 from linux
 
 ## Networking of project 
 
@@ -88,12 +91,14 @@ This repo was used in a deployment to an AWS EC2 instance running Docker. Typica
 2. Transfer project files and a secured `.env` to the server.
 3. Use `docker compose up -d --build` to start the services.
 4. Secure nginx, close unnecessary ports, and use SSH tunnels or an authentication layer for phpMyAdmin.
+5. Daily database backups.
 
 ## Notes
 
 - Do not commit your real `.env` file—keep secrets local and out of Git.
 - The `.env` file is ignored by Git via `.gitignore`.
 - This project is intended for learning, demos, and small-scale deployments.
+- Use s3 backup after backup to machine
 
 ## Proof and Screenshots
 
@@ -131,4 +136,4 @@ Key variables:
 - The .env file is ignored by Git through [.gitignore](.gitignore).
 - This project is suitable for learning, local development, and basic portfolio/demo purposes.
 - Use domain name and SSL certificates owned by user.
-- User must have a bucket(also put that name in s3 s3_backup.sh) and AWS configured in ec2 instance if he wants to backup to s3.
+- User must have a bucket(also configure that name in s3 s3_backup.sh) and AWS configured in ec2 instance if he wants to backup to s3.
