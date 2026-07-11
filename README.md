@@ -120,9 +120,16 @@ Key variables:
 - The database schema and initial data are loaded using [setup.sql](setup.sql).
 - The application connects to the database using settings from [config.php](config.php).
 
+## Backup Database Daily Automatically 
+1. Use Command crontab -e
+2. And Paste :- 0 2 * * * bash /home/user/scripts/backup_locally.sh
+3. Same if user want to backup the data to s3 then use same command , and replace the file name to s3_backup.sh in the crontab .
+
+
 ## Notes
 - Keep your real secrets in a local .env file and do not commit it to Git.
 - The .env file is ignored by Git through [.gitignore](.gitignore).
 - This project is suitable for learning, local development, and basic portfolio/demo purposes.
-- Use domain name and SSL certificates owned by you.
+- Use domain name and SSL certificates owned by user.
+- User must have a bucket(also put that name in s3 s3_backup.sh) and AWS configured in ec2 instance if he wants to backup to s3.
 >>>>>>> da7b54b (Initial commit: project files and proof-screenshots)
